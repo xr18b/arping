@@ -5,8 +5,20 @@ import sys
 from lib import platform, arp
 
 
+def usage() -> None:
+    print('''usage: {0} [-h] [-n]
+
+Optional arguments:
+    -h, --help   Show this help message and exit
+    -n, --name   Try to perform a reverse-lookup on found IP addresses'''.format(sys.argv[0]))
+
+
 def main(argv) -> None:
     do_lookup = False
+
+    if '-h' in argv or '--help' in argv:
+        usage()
+        sys.exit(0)
 
     if '-n' in argv or '--name' in argv:
         do_lookup = True
