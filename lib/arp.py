@@ -8,10 +8,8 @@ import socket
 def get_host(ip):
     try:
         return ' ({0})'.format(socket.gethostbyaddr(ip)[0])
-    except socket.herror:
-        return ""
     except:
-        return ""
+        return None
 
 
 def pingsweep(net, do_lookup = False) -> list:
