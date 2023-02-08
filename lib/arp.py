@@ -14,7 +14,7 @@ def get_host(ip):
         return ""
 
 
-def pingsweep(net) -> list:
+def pingsweep(net, do_lookup = False) -> list:
     conf.verb=0
 
     _answer,_unanswer=srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=str(net.cidr)),timeout=2)
@@ -25,7 +25,11 @@ def pingsweep(net) -> list:
         mac = netaddr.EUI(rcv[Ether].src)
         mac.dialect = netaddr.mac_unix
         ip = rcv[ARP].psrc
-        hostname = get_host(ip)
+
+        hostname = ""
+        if do_lookup:
+            hostname = get_host(ip)
+
         hosts.append([ip, mac, hostname])
 
     return sorted(hosts)
