@@ -8,10 +8,8 @@ import socket
 def get_host(ip):
     try:
         return ' ({0})'.format(socket.gethostbyaddr(ip)[0])
-    except socket.herror:
-        return ""
     except:
-        return ""
+        return None
 
 
 def pingsweep(net, do_lookup = False) -> list:
@@ -26,10 +24,13 @@ def pingsweep(net, do_lookup = False) -> list:
         mac.dialect = netaddr.mac_unix
         ip = rcv[ARP].psrc
 
-        hostname = ""
+        _host = {"ip": ip, "mac": mac}
+
         if do_lookup:
-            hostname = get_host(ip)
+            _hostname = get_host(ip)
+            if _hostname:
+                _host["hostname"] = _hostname
 
-        hosts.append([ip, mac, hostname])
+        hosts.append(_host)
 
-    return sorted(hosts)
+    return sorted(hosts, key=lambda d: d['ip'])

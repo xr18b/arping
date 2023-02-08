@@ -32,8 +32,13 @@ def main(argv) -> None:
     for _iface in ifaces:
         print('Scanning interface {0}, with IP {1}:'.format(_iface.name, _iface.subnet))
         hosts = arp.pingsweep(net = _iface.subnet, do_lookup = do_lookup)
+
         for _host in hosts:
-            print('\t{0} - {1}{2}'.format(_host[0], _host[1], _host[2]))
+            print('\t{0} - {1}{2}'.format(
+                _host['ip'],
+                _host['mac'],
+                _host['hostname'] if 'hostname' in _host else "")
+            )
 
     sys.exit(0)
 
