@@ -6,6 +6,9 @@ from lib import platform, arp
 
 
 def usage() -> None:
+    """
+    Print help message and exit
+    """
     print('''usage: {0} [-h] [-n]
 
 Optional arguments:
