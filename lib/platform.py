@@ -35,15 +35,29 @@ class Interface:
 
 
 def is_root() -> bool:
-    """Verifies if the current user is root"""
+    """
+    Verifies if the current user is root
+    
+    :return:  'True' if root, 'False' if not
+    """
     return not os.getuid()
 
 
 def interfaces() -> list:
+    """
+    Get list of all interfaces
+
+    :return:  List of objects "Interface"
+    """
     return [Interface(i) for i in netifaces.interfaces()]
 
 
 def ip_interfaces() -> list:
+    """
+    Get list of all interfaces except loopbacks
+
+    :return:  List of objects "Interface", but without the loopback
+    """
     ifaces = []
 
     for _iface in interfaces():

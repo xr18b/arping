@@ -6,6 +6,12 @@ import netaddr
 import socket
 
 def get_host(ip):
+    """
+    Try to perform reverse lookup of the given IP address
+
+    :param ip:  IP address to look for
+    :return:    Str containing the hostname between brackets, or empty if no result
+    """
     try:
         return ' ({0})'.format(socket.gethostbyaddr(ip)[0])
     except:
@@ -13,6 +19,14 @@ def get_host(ip):
 
 
 def pingsweep(net, do_lookup = False) -> list:
+    """
+    Will perform ARP request for every ip addresses in the given range
+    
+    :param net:  IP range
+    :do_lookup:  Set to 'True' to try reverse lookup on responding IP addresses
+                 Default it 'False'
+    :return:     List of dictionnaries containing IP, MAC and Hostname of replying hosts
+    """
     conf.verb=0
 
     _answer,_unanswer=srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=str(net.cidr)),timeout=2)
