@@ -18,7 +18,7 @@ def get_host(ip):
         return None
 
 
-def pingsweep(net, do_lookup = False) -> list:
+def pingsweep(net, do_lookup = False, mac_format = 'unix') -> list:
     """
     Will perform ARP request for every ip addresses in the given range
     
@@ -35,8 +35,11 @@ def pingsweep(net, do_lookup = False) -> list:
 
     for snd,rcv in _answer:
         mac = netaddr.EUI(rcv[Ether].src)
-        mac.dialect = netaddr.mac_unix
         ip = rcv[ARP].psrc
+        if mac_format == 'cisco':
+            mac.dialect = netaddr.mac_cisco
+        elif mac_format == 'unix': 
+            mac.dialect = netaddr.mac_unix_expanded
 
         _host = {"ip": ip, "mac": mac}
 
