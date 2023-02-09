@@ -64,7 +64,7 @@ def main(argv) -> None:
         hosts = arp.pingsweep(net = _iface.subnet, do_lookup = do_lookup, mac_format = mac_format)
 
         for _host in hosts:
-            print('\t{0} - {1}{2}'.format(
+            print('\t{0:<15} {1} {2}'.format(
                 _host['ip'],
                 _host['mac'],
                 _host['hostname'] if 'hostname' in _host else "")
