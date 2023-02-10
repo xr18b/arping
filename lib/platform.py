@@ -43,15 +43,6 @@ def is_root() -> bool:
     return not os.getuid()
 
 
-def interfaces() -> list:
-    """
-    Get list of all interfaces
-
-    :return:  List of objects "Interface"
-    """
-    return [Interface(i) for i in netifaces.interfaces()]
-
-
 def ip_interfaces() -> list:
     """
     Get list of all interfaces except loopbacks
@@ -60,7 +51,7 @@ def ip_interfaces() -> list:
     """
     ifaces = []
 
-    for _iface in interfaces():
+    for _iface in [Interface(i) for i in netifaces.interfaces()]:
         if _iface.has_ip() and _iface.not_localhost():
             ifaces.append(_iface)
 
