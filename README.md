@@ -10,5 +10,8 @@ Optionally, you can also have it try to perform a reverse-lookup to print the ho
 Optional arguments:
     -h, --help   Show this help message and exit
     -n, --name   Try to perform a reverse-lookup on found IP addresses
+    -f FORMAT, --format FORMAT
+                 Format to use to display MAC addresses.
+                 Acceptable values are: unix (default), win, cisco
 ```
 
