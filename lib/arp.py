@@ -35,17 +35,15 @@ def pingsweep(net, do_lookup = False, mac_format = 'unix') -> list:
 
     for snd,rcv in _answer:
         mac = netaddr.EUI(rcv[Ether].src)
-        ip = rcv[ARP].psrc
         if mac_format == 'cisco':
             mac.dialect = netaddr.mac_cisco
         elif mac_format == 'unix': 
             mac.dialect = netaddr.mac_unix_expanded
 
-        _host = {"ip": ip, "mac": mac}
+        _host = {"ip": rcv[ARP].psrc, "mac": mac}
 
         if do_lookup:
-            _hostname = get_host(ip)
-            if _hostname:
+            if _hostname := get_host(_host["ip"]):
                 _host["hostname"] = _hostname
 
         hosts.append(_host)
