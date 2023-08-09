@@ -18,7 +18,7 @@ def get_host(ip):
         return None
 
 
-def pingsweep(net, do_lookup = False, mac_format = 'unix') -> list:
+def pingsweep(net, do_lookup = False, mac_format = 'unix', timeout = 2) -> list:
     """
     Will perform ARP request for every ip addresses in the given range
     
@@ -29,7 +29,7 @@ def pingsweep(net, do_lookup = False, mac_format = 'unix') -> list:
     """
     conf.verb=0
 
-    _answer,_unanswer=srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=str(net.cidr)),timeout=2)
+    _answer,_unanswer=srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=str(net.cidr)),timeout=timeout)
 
     hosts = []
 

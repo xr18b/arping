@@ -19,12 +19,16 @@ Optional arguments:
     -n, --name   Try to perform a reverse-lookup on found IP addresses
     -f FORMAT, --format FORMAT
                  Format to use to display MAC addresses.
-                 Acceptable values are: unix (default), win, cisco'''.format(sys.argv[0]))
+                 Acceptable values are: unix (default), win, cisco
+    -t VALUE, --timeout VALUE
+                 Time in seconds to wait for response
+                 Default is 2'''.format(sys.argv[0]))
 
 
 def main(argv) -> None:
     do_lookup = False
     mac_format = 'unix'
+    timeout = 5
 
     if '-h' in argv or '--help' in argv:
         usage()
@@ -53,6 +57,22 @@ def main(argv) -> None:
             print('ERROR - Unknown format `{0}`'.format(mac_format))
             sys.exit(1)
 
+    if '-t' in argv:
+        timeout = argv[argv.index('-t')+1]
+        try:
+            timeout = int(timeout)
+        except ValueError:
+            print('ERROR - timeout should be an integer')
+            sys.exit(1)
+
+    if '--timeout' in argv:
+        timeout = argv[argv.index('--timeout')+1]
+        try:
+            timeout = int(timeout)
+        except ValueError:
+            print('ERROR - timeout should be an integer')
+            sys.exit(1)
+
     if not platform.is_root():
         print('Need to be root')
         sys.exit(1)
@@ -61,7 +81,7 @@ def main(argv) -> None:
 
     for _iface in ifaces:
         print('Scanning interface {0}, with IP {1}:'.format(_iface.name, _iface.subnet))
-        hosts = arp.pingsweep(net = _iface.subnet, do_lookup = do_lookup, mac_format = mac_format)
+        hosts = arp.pingsweep(net = _iface.subnet, do_lookup = do_lookup, mac_format = mac_format, timeout = timeout)
 
         for _host in hosts:
             print('\t{0:<15} {1} {2}'.format(
