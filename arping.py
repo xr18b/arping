@@ -22,7 +22,9 @@ Optional arguments:
                  Acceptable values are: unix (default), win, cisco
     -t VALUE, --timeout VALUE
                  Time in seconds to wait for response
-                 Default is 2'''.format(sys.argv[0]))
+                 Default is 2
+    -i VALUE, --interface VALUE
+                 Limit the scan to specific interface'''.format(sys.argv[0]))
 
 
 def main(argv) -> None:
@@ -73,13 +75,41 @@ def main(argv) -> None:
             print('ERROR - timeout should be an integer')
             sys.exit(1)
 
+    ifaces = platform.ip_interfaces()
+
+    # Create a list with all interfaces name to be able to verify if the filtered interface exists
+    ifaces_names = []
+    for _iface in ifaces:
+        ifaces_names.append(_iface.name)
+
+    if '-i' in argv:
+        try:
+            limit_iface = argv[argv.index('-i')+1]
+        except IndexError:
+            print('ERROR - missing argument to `-i`')
+            sys.exit(1)
+        if limit_iface not in ifaces_names:
+            print('ERROR - {0}: no such interface'.format(limit_iface))
+            sys.exit(1)
+
+    if '--interface' in argv:
+        try:
+            limit_iface = argv[argv.index('--interface')+1]
+        except IndexError:
+            print('ERROR - missing argument to `--interface`')
+            sys.exit(1)
+        if limit_iface not in ifaces_names:
+            print('ERROR - {0}: no such interface'.format(limit_iface))
+            sys.exit(1)
+
     if not platform.is_root():
         print('Need to be root')
         sys.exit(1)
 
-    ifaces = platform.ip_interfaces()
-
     for _iface in ifaces:
+        if limit_iface != _iface.name:
+            continue
+
         print('Scanning interface {0}, with IP {1}:'.format(_iface.name, _iface.subnet))
         hosts = arp.pingsweep(net = _iface.subnet, do_lookup = do_lookup, mac_format = mac_format, timeout = timeout)
 
