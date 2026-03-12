@@ -20,15 +20,16 @@ class Interface:
 
     def get_data(self) -> None:
         try:
-            self.ifaddresses = netifaces.ifaddresses(self.name)[netifaces.AF_INET][0]
+            self.ifaddresses = netifaces.ifaddresses(
+                self.name)[netifaces.AF_INET][0]
             self.ip = netaddr.IPAddress(self.ifaddresses['addr'])
             self.netmask = netaddr.IPAddress(self.ifaddresses['netmask'])
-            self.subnet = netaddr.IPNetwork('{0}/{1}'.format(self.ip, self.netmask))
+            self.subnet = netaddr.IPNetwork(f"{self.ip}/{self.netmask}")
         except KeyError:
             pass
 
     def has_ip(self) -> str:
-        return self.ip
+        return str(self.ip)
 
     def not_localhost(self):
         return str(self.ip) not in LOCALHOST_ADDR

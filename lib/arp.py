@@ -10,7 +10,7 @@ def get_host(ip):
     Try to perform reverse lookup of the given IP address
 
     :param ip:  IP address to look for
-    :return:    Str containing the hostname between brackets, or empty if no result
+    :return:    Str containing the hostname into brackets (empty if no result)
     """
     try:
         return socket.gethostbyaddr(ip)[0]
@@ -25,11 +25,13 @@ def pingsweep(net, do_lookup = False, mac_format = 'unix', timeout = 2) -> list:
     :param net:  IP range
     :do_lookup:  Set to 'True' to try reverse lookup on responding IP addresses
                  Default it 'False'
-    :return:     List of dictionnaries containing IP, MAC and Hostname of replying hosts
+    :return:     List of dict containing IP, MAC and Hostname of replying hosts
     """
     conf.verb=0
 
-    _answer,_unanswer=srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=str(net.cidr)),timeout=timeout)
+    _answer,_unanswer=srp(
+        Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=str(net.cidr)),timeout=timeout
+    )
 
     hosts = []
 
