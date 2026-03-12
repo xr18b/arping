@@ -6,6 +6,7 @@ from lib import platform, arp
 
 
 _supported_mac_format = ['win', 'unix', 'cisco']
+_default_timeout = 2
 
 
 def usage() -> None:
@@ -22,7 +23,7 @@ Optional arguments:
                  Acceptable values are: unix (default), win, cisco
     -t VALUE, --timeout VALUE
                  Time in seconds to wait for response
-                 Default is 2
+                 Default is {_default_timeout}
     -i VALUE, --interface VALUE
                  Limit the scan to specific interface""")
 
@@ -30,7 +31,7 @@ Optional arguments:
 def main(argv) -> None:
     do_lookup = False
     mac_format = 'unix'
-    timeout = 5
+    timeout = _default_timeout
 
     if '-h' in argv or '--help' in argv:
         usage()
