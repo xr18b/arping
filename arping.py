@@ -6,7 +6,7 @@ import argparse
 from lib import platform, arp
 
 
-_supported_mac_format = ['win', 'unix', 'cisco']
+_supported_mac_format = ['unix', 'cisco', 'win']
 _default_timeout = 2
 
 
@@ -29,12 +29,12 @@ def main() -> int:
         '-f', '--format',
         help='Format to use to display MAC addressess\r\n'
              f'Supported values are: {_supported_mac_format}'
-             f' (default: \'unix\')',
+             f' (default: {_supported_mac_format[0]!r})',
         dest='mac_format',
         type=str,
         required=False,
         choices=_supported_mac_format,
-        default='unix'
+        default=_supported_mac_format[0]
     )
 
     parser.add_argument(
